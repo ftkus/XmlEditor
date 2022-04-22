@@ -1,0 +1,37 @@
+﻿# Dossiers de compilation et sorties
+/**/bin/
+/**/obj/
+/src/Collector/LibHawkview/autoGen_version.tmp
+
+
+# Dossiers temporaires et préférences user
+.vs
+*.Caches
+*.user
+
+# All Hawkview workspace files
+*.wrk
+*.aqd
+*.rdf
+
+# Fichiers temporaires
+*.suo
+.~*
+$~*~
+.#*
+\#*
+*.~vsdx
+
+# Liens vers fichiers et outputs pep
+/src/Collector/output/
+/src/Collector/*Key.bin
+
+# Fichiers settings user de ReSharper
+*.DotSettings.user
+
+# Dossiers pour les outputs de tests
+/**/test/
+
+# Advanced Installer
+/**/Installer-cache/
+/**/Installer/Output/
