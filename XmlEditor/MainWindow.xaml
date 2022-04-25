@@ -40,7 +40,7 @@
             <DockPanel Grid.Column="0">
                 <Menu DockPanel.Dock="Top">
                     <MenuItem Header="New"
-                              Click="MiNewNode_OnClick"/>
+                              Command="{Binding NewNodeCommand}"/>
                     <MenuItem Header="Edit"/>
                 </Menu>
                 

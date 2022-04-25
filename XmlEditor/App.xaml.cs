@@ -25,11 +25,11 @@ namespace XmlEditor
 
         public bool IsOpen => !string.IsNullOrWhiteSpace(FilePath);
 
-        private XmlNodeViewModel _selectedXmlNode;
-        private ObservableCollection<XmlNodeViewModel> _xmlNodes;
-        private string _windowTitle;
-        private string _searchFilter;
-
+        private XmlNodeViewModel selectedXmlNode;
+        private ObservableCollection<XmlNodeViewModel> xmlNodes;
+        private string windowTitle;
+        private string searchFilter;
+        private string filePath;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -40,9 +40,19 @@ namespace XmlEditor
             NewFileCommand = new NewFileCommand();
             OpenFileCommand = new OpenFileCommand();
             SaveFileCommand = new SaveFileCommand();
+            NewNodeCommand = new NewNodeCommand();
+
+            ApplyChanges();
         }
 
-        public string FilePath { get; private set; }
+        public string FilePath
+        {
+            get => filePath; private set
+            {
+                filePath = value;
+                ApplyChanges();
+            }
+        }
 
         public CloseFileCommand CloseFileCommand { get; set; }
 
@@ -54,35 +64,37 @@ namespace XmlEditor
 
         public SaveFileCommand SaveFileCommand { get; set; }
 
+        public NewNodeCommand NewNodeCommand { get; set; }
+
         public ObservableCollection<XmlNodeViewModel> XmlNodes
         {
-            get => _xmlNodes;
+            get => xmlNodes;
             set
             {
-                if (Equals(value, _xmlNodes)) return;
-                _xmlNodes = value;
+                if (Equals(value, xmlNodes)) return;
+                xmlNodes = value;
                 OnPropertyChanged();
             }
         }
 
         public XmlNodeViewModel SelectedXmlNode
         {
-            get => _selectedXmlNode;
+            get => selectedXmlNode;
             set
             {
-                if (Equals(value, _selectedXmlNode)) return;
-                _selectedXmlNode = value;
+                if (Equals(value, selectedXmlNode)) return;
+                selectedXmlNode = value;
                 OnPropertyChanged();
             }
         }
 
         public string SearchFilter
         {
-            get => _searchFilter;
+            get => searchFilter;
             set
             {
-                if (value == _searchFilter) return;
-                _searchFilter = value;
+                if (value == searchFilter) return;
+                searchFilter = value;
                 OnPropertyChanged();
 
                 ApplySearchFilter(value);
@@ -91,11 +103,11 @@ namespace XmlEditor
 
         public string WindowTitle
         {
-            get => _windowTitle;
+            get => windowTitle;
             set
             {
-                if (value == _windowTitle) return;
-                _windowTitle = value;
+                if (value == windowTitle) return;
+                windowTitle = value;
                 OnPropertyChanged();
             }
         }
@@ -201,6 +213,13 @@ namespace XmlEditor
             {
                 xmlNode.ApplySearchFilter(searchFilter);
             }
+        }
+
+        private void ApplyChanges()
+        {
+            CloseFileCommand.RaiseCanExecuteChanged();
+            SaveFileCommand.RaiseCanExecuteChanged();
+            NewNodeCommand.RaiseCanExecuteChanged();
         }
 
         private void SetTitle()

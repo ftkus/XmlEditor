@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace XmlEditor.Commands
 {
-    internal class NewNodeCommand : ICommand
+    public class NewNodeCommand : ICommand
     {
         public event EventHandler? CanExecuteChanged;
 
@@ -19,6 +19,11 @@ namespace XmlEditor.Commands
         public void Execute(object? parameter)
         {
             throw new NotImplementedException();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

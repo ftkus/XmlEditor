@@ -20,5 +20,10 @@ namespace XmlEditor.Commands
         {
             App.Instance.SaveFile();
         }
+
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }
