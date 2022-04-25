@@ -267,6 +267,8 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         XmlNodes = new ObservableCollection<XmlNodeViewModel>();
         SelectedXmlNode = null;
         NodeEditor.ViewModel = null;
+
+        IsOpen = false;
     }
 
     private void MiExit_OnClick(object sender, RoutedEventArgs e)
