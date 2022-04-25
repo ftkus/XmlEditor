@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace XmlEditor.Commands
 {
-    internal class OpenFileCommand : ICommand
+    public class OpenFileCommand : ICommand
     {
         public event EventHandler? CanExecuteChanged;
 

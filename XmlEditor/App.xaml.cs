@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
 using XmlEditor.Annotations;
+using XmlEditor.Commands;
 using XmlEditor.ViewModel;
 
 namespace XmlEditor
@@ -29,6 +30,21 @@ namespace XmlEditor
         public string FilePath;
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        public App()
+        {
+            CloseFileCommand = new CloseFileCommand();
+            ExitCommand = new ExitCommand();
+            NewFileCommand = new NewFileCommand();
+            OpenFileCommand = new OpenFileCommand();
+            SaveFileCommand = new SaveFileCommand();
+        }
+
+        public CloseFileCommand CloseFileCommand { get; set; }
+        public ExitCommand ExitCommand { get; set; }
+        public NewFileCommand NewFileCommand { get; set; }
+        public OpenFileCommand OpenFileCommand { get; set; }
+        public SaveFileCommand SaveFileCommand { get; set; }
 
         public ObservableCollection<XmlNodeViewModel> XmlNodes
         {

@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace XmlEditor.Commands
 {
-    internal class ExitCommand : ICommand
+    public class ExitCommand : ICommand
     {
         public event EventHandler? CanExecuteChanged;
 

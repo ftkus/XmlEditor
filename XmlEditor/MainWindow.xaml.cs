@@ -17,7 +17,6 @@ namespace XmlEditor;
 /// </summary>
 public partial class MainWindow : Window, INotifyPropertyChanged
 {
-    private bool _isOpen;
     private string _windowTitle;
     private XmlNodeViewModel _selectedXmlNode;
     private ObservableCollection<XmlNodeViewModel> _xmlNodes;
@@ -34,16 +33,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         NodeEditor.OnSave += (_, _) => { SelectedXmlNode?.UpdateFromElement(); };
     }
 
-    public bool IsOpen
-    {
-        get => _isOpen;
-        set
-        {
-            if (value == _isOpen) return;
-            _isOpen = value;
-            OnPropertyChanged();
-        }
-    }
+    public App App => App.Instance;
 
     public string File { get; set; }
 
@@ -95,29 +85,6 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private bool TryOpenFile(string file)
-    {
-        try
-        {
-            var txt = System.IO.File.ReadAllText(file);
-
-            if (string.IsNullOrWhiteSpace(txt)) return true;
-
-            var xml = XElement.Parse(txt);
-
-            XmlNodes = new ObservableCollection<XmlNodeViewModel>();
-            SelectedXmlNode = null;
-
-            XmlNodes.Add(new XmlNodeViewModel(xml));
-        }
-        catch (Exception ex)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     private void SetTitle()
     {
         WindowTitle = string.IsNullOrWhiteSpace(File) ? "XmlEditor" : $"XmlEditor - {File}";
@@ -137,62 +104,6 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    private void MiNewFile_OnClick(object sender, RoutedEventArgs e)
-    {
-        if (IsOpen)
-        {
-            var result = MessageBox.Show(this, "Unsaved changes will be lost", "Closing",
-                MessageBoxButton.OKCancel);
-
-            if (result != MessageBoxResult.OK) return;
-        }
-
-        var sfd = new SaveFileDialog();
-
-        if (sfd.ShowDialog() == true)
-        {
-            File = sfd.FileName;
-
-            var fs = System.IO.File.Create(File);
-
-            fs.Close();
-            fs.Dispose();
-
-            XmlNodes = new ObservableCollection<XmlNodeViewModel>();
-            SelectedXmlNode = null;
-
-            SetTitle();
-
-            IsOpen = true;
-        }
-    }
-
-    private void MiOpenFile_OnClick(object sender, RoutedEventArgs e)
-    {
-        if (IsOpen)
-        {
-            var result = MessageBox.Show(this, "Unsaved changes will be lost", "Closing",
-                MessageBoxButton.OKCancel);
-
-            if (result != MessageBoxResult.OK) return;
-        }
-
-        var ofd = new OpenFileDialog();
-
-        if (!string.IsNullOrWhiteSpace(File)) ofd.FileName = File;
-
-        if (ofd.ShowDialog() == true)
-        {
-            File = ofd.FileName;
-
-            if (!TryOpenFile(File)) File = string.Empty;
-
-            IsOpen = true;
-
-            SetTitle();
-        }
-    }
-
     private void MiNewNode_OnClick(object sender, RoutedEventArgs e)
     {
         var newElement = new XElement("New", "New Content");
@@ -210,40 +121,6 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         }
     }
 
-    private void MiSaveFile_OnClick(object sender, RoutedEventArgs e)
-    {
-        if (string.IsNullOrWhiteSpace(File)) return;
-
-        try
-        {
-            var xels = XmlNodes.Select(x => x.Element);
-
-            string content = null;
-
-            if (xels.Count() == 1)
-            {
-                content = xels.First().ToString();
-            }
-            else
-            {
-                var newXel = new XElement("Content");
-
-                foreach (var xel in xels) newXel.Add(xel);
-
-                content = newXel.ToString();
-            }
-
-            using (var fs = new FileStream(File, FileMode.Truncate, FileAccess.ReadWrite))
-            using (var sw = new StreamWriter(fs))
-            {
-                sw.Write(content);
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(this, ex.Message);
-        }
-    }
 
     private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
@@ -253,35 +130,4 @@ public partial class MainWindow : Window, INotifyPropertyChanged
             NodeEditor.ViewModel = SelectedXmlNode.Clone();
         }
     }
-
-    private void MiCloseFile_OnClick(object sender, RoutedEventArgs e)
-    {
-        if (!IsOpen) return;
-
-        var result = MessageBox.Show(this, "Unsaved changes will be lost", "Closing", MessageBoxButton.OKCancel);
-
-        if (result != MessageBoxResult.OK) return;
-
-        File = null;
-
-        XmlNodes = new ObservableCollection<XmlNodeViewModel>();
-        SelectedXmlNode = null;
-        NodeEditor.ViewModel = null;
-
-        IsOpen = false;
-    }
-
-    private void MiExit_OnClick(object sender, RoutedEventArgs e)
-    {
-        if (IsOpen)
-        {
-            var result = MessageBox.Show(this, "Unsaved changes will be lost", "Closing",
-                MessageBoxButton.OKCancel);
-
-            if (result != MessageBoxResult.OK) return;
-        }
-
-        Application.Current.Shutdown();
-    }
-
 }

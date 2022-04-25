@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace XmlEditor.Commands
 {
-    internal class SaveFileCommand : ICommand
+    public class SaveFileCommand : ICommand
     {
         public event EventHandler? CanExecuteChanged;
 
