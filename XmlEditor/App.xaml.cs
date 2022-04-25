@@ -27,7 +27,9 @@ namespace XmlEditor
 
         private XmlNodeViewModel _selectedXmlNode;
         private ObservableCollection<XmlNodeViewModel> _xmlNodes;
-        public string FilePath;
+        private string _windowTitle;
+        private string _searchFilter;
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -39,6 +41,8 @@ namespace XmlEditor
             OpenFileCommand = new OpenFileCommand();
             SaveFileCommand = new SaveFileCommand();
         }
+
+        public string FilePath { get; private set; }
 
         public CloseFileCommand CloseFileCommand { get; set; }
         public ExitCommand ExitCommand { get; set; }
@@ -68,6 +72,30 @@ namespace XmlEditor
             }
         }
 
+        public string SearchFilter
+        {
+            get => _searchFilter;
+            set
+            {
+                if (value == _searchFilter) return;
+                _searchFilter = value;
+                OnPropertyChanged();
+
+                ApplySearchFilter(value);
+            }
+        }
+
+        public string WindowTitle
+        {
+            get => _windowTitle;
+            set
+            {
+                if (value == _windowTitle) return;
+                _windowTitle = value;
+                OnPropertyChanged();
+            }
+        }
+
         public void OpenFile(string filepath)
         {
             try
@@ -90,6 +118,8 @@ namespace XmlEditor
             {
                 MessageBox.Show(Current.MainWindow, ex.Message);
             }
+
+            SetTitle();
         }
 
         public void NewFile(string filepath)
@@ -131,11 +161,28 @@ namespace XmlEditor
             {
                 MessageBox.Show(Current.MainWindow, ex.Message);
             }
+
+            SetTitle();
         }
 
         public void CloseFile()
         {
             FilePath = null;
+
+            SetTitle();
+        }
+
+        private void ApplySearchFilter(string searchFilter)
+        {
+            foreach (var xmlNode in XmlNodes)
+            {
+                xmlNode.ApplySearchFilter(searchFilter);
+            }
+        }
+
+        private void SetTitle()
+        {
+            WindowTitle = string.IsNullOrWhiteSpace(FilePath) ? "XmlEditor" : $"XmlEditor - {FilePath}";
         }
 
         [NotifyPropertyChangedInvocator]

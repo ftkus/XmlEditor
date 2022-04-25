@@ -15,109 +15,32 @@ namespace XmlEditor;
 /// <summary>
 ///     Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window, INotifyPropertyChanged
+public partial class MainWindow : Window
 {
-    private string _windowTitle;
-    private XmlNodeViewModel _selectedXmlNode;
-    private ObservableCollection<XmlNodeViewModel> _xmlNodes;
-    private string _searchFilter;
-
     public MainWindow()
     {
-        XmlNodes = new ObservableCollection<XmlNodeViewModel>();
-
-        SetTitle();
-
         InitializeComponent();
 
-        NodeEditor.OnSave += (_, _) => { SelectedXmlNode?.UpdateFromElement(); };
+        NodeEditor.OnSave += (_, _) => { App.SelectedXmlNode?.UpdateFromElement(); };
     }
 
     public App App => App.Instance;
 
-    public string File { get; set; }
-
-    public string SearchFilter
-    {
-        get => _searchFilter;
-        set
-        {
-            if (value == _searchFilter) return;
-            _searchFilter = value;
-            OnPropertyChanged();
-
-            ApplySearchFilter(value);
-        }
-    }
-
-    public string WindowTitle
-    {
-        get => _windowTitle;
-        set
-        {
-            if (value == _windowTitle) return;
-            _windowTitle = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public ObservableCollection<XmlNodeViewModel> XmlNodes
-    {
-        get => _xmlNodes;
-        set
-        {
-            if (Equals(value, _xmlNodes)) return;
-            _xmlNodes = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public XmlNodeViewModel SelectedXmlNode
-    {
-        get => _selectedXmlNode;
-        set
-        {
-            if (Equals(value, _selectedXmlNode)) return;
-            _selectedXmlNode = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    private void SetTitle()
-    {
-        WindowTitle = string.IsNullOrWhiteSpace(File) ? "XmlEditor" : $"XmlEditor - {File}";
-    }
-
-    private void ApplySearchFilter(string searchFilter)
-    {
-        foreach (var xmlNode in XmlNodes)
-        {
-            xmlNode.ApplySearchFilter(searchFilter);
-        }
-    }
-
-    [NotifyPropertyChangedInvocator]
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
 
     private void MiNewNode_OnClick(object sender, RoutedEventArgs e)
     {
         var newElement = new XElement("New", "New Content");
         var newNode = new XmlNodeViewModel(newElement);
 
-        if (SelectedXmlNode is null)
+        if (App.SelectedXmlNode is null)
         {
-            XmlNodes.Add(newNode);
+            App.XmlNodes.Add(newNode);
         }
         else
         {
-            SelectedXmlNode.Element.Add(newElement);
-            SelectedXmlNode.IsExpanded = true;
-            SelectedXmlNode.UpdateFromElement();
+            App.SelectedXmlNode.Element.Add(newElement);
+            App.SelectedXmlNode.IsExpanded = true;
+            App.SelectedXmlNode.UpdateFromElement();
         }
     }
 
@@ -126,8 +49,8 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     {
         if (e.NewValue is XmlNodeViewModel nvm)
         {
-            SelectedXmlNode = nvm;
-            NodeEditor.ViewModel = SelectedXmlNode.Clone();
+            App.SelectedXmlNode = nvm;
+            NodeEditor.ViewModel = App.SelectedXmlNode.Clone();
         }
     }
 }
