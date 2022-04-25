@@ -18,8 +18,8 @@ namespace XmlEditor;
 public partial class MainWindow : Window, INotifyPropertyChanged
 {
     private bool _isOpen;
-    private XmlNodeViewModel _selectedXmlNode;
     private string _windowTitle;
+    private XmlNodeViewModel _selectedXmlNode;
     private ObservableCollection<XmlNodeViewModel> _xmlNodes;
     private string _searchFilter;
 
