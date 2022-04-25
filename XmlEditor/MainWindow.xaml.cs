@@ -26,25 +26,6 @@ public partial class MainWindow : Window
 
     public App App => App.Instance;
 
-
-    private void MiNewNode_OnClick(object sender, RoutedEventArgs e)
-    {
-        var newElement = new XElement("New", "New Content");
-        var newNode = new XmlNodeViewModel(newElement);
-
-        if (App.SelectedXmlNode is null)
-        {
-            App.XmlNodes.Add(newNode);
-        }
-        else
-        {
-            App.SelectedXmlNode.Element.Add(newElement);
-            App.SelectedXmlNode.IsExpanded = true;
-            App.SelectedXmlNode.UpdateFromElement();
-        }
-    }
-
-
     private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
         if (e.NewValue is XmlNodeViewModel nvm)

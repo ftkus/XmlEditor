@@ -18,7 +18,7 @@ namespace XmlEditor.Commands
 
         public void Execute(object? parameter)
         {
-            throw new NotImplementedException();
+            App.Instance.NewNode();
         }
 
         public void RaiseCanExecuteChanged()

@@ -35,6 +35,8 @@ namespace XmlEditor
 
         public App()
         {
+            SetTitle();
+
             CloseFileCommand = new CloseFileCommand();
             ExitCommand = new ExitCommand();
             NewFileCommand = new NewFileCommand();
@@ -43,6 +45,8 @@ namespace XmlEditor
             NewNodeCommand = new NewNodeCommand();
 
             ApplyChanges();
+
+            XmlNodes = new ObservableCollection<XmlNodeViewModel>();
         }
 
         public string FilePath
@@ -203,6 +207,8 @@ namespace XmlEditor
         public void CloseFile()
         {
             FilePath = null;
+            XmlNodes.Clear();
+            SelectedXmlNode = null;
 
             SetTitle();
         }

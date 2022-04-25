@@ -9,8 +9,8 @@
         x:Name="win"
         DataContext="{Binding RelativeSource={RelativeSource Self}, Path=App}"
         Title="{Binding WindowTitle}"
-        Height="450"
-        Width="800">
+        Height="650"
+        Width="1200">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
