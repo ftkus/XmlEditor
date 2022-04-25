@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace XmlEditor.Commands
 {
-    internal class CloseCommand : ICommand
+    internal class SaveFileCommand : ICommand
     {
         public event EventHandler? CanExecuteChanged;
 
@@ -18,12 +18,7 @@ namespace XmlEditor.Commands
 
         public void Execute(object? parameter)
         {
-            if (App.Instance.IsOpen)
-            {
-                if (!App.PromptUnsavedChanges()) { return; }
-            }
-
-            App.Instance.Close();
+            App.Instance.SaveFile();
         }
     }
 }

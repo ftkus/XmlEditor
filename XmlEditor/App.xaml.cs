@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -51,7 +52,7 @@ namespace XmlEditor
             }
         }
 
-        public void Open(string filepath)
+        public void OpenFile(string filepath)
         {
             try
             {
@@ -66,21 +67,57 @@ namespace XmlEditor
 
                     XmlNodes.Add(new XmlNodeViewModel(xml));
                 }
+
+                FilePath = filepath;
             }
             catch (Exception ex)
             {
-                return;
+                MessageBox.Show(Current.MainWindow, ex.Message);
             }
-
-            FilePath = filepath;
         }
 
-        public void Save()
+        public void NewFile(string filepath)
         {
+            var fs = System.IO.File.Create(filepath);
+            fs.Dispose();
 
+            OpenFile(filepath);
         }
 
-        public void Close()
+        public void SaveFile()
+        {
+            try
+            {
+                var xels = XmlNodes.Select(x => x.Element);
+
+                string content = null;
+
+                if (xels.Count() == 1)
+                {
+                    content = xels.First().ToString();
+                }
+                else
+                {
+                    var newXel = new XElement("Content");
+
+                    foreach (var xel in xels) newXel.Add(xel);
+
+                    content = newXel.ToString();
+                }
+
+                using (var fs = new FileStream(FilePath, FileMode.Truncate, FileAccess.ReadWrite))
+                using (var sw = new StreamWriter(fs))
+                {
+                    sw.Write(content);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(Current.MainWindow, ex.Message);
+            }
+        }
+
+        public void CloseFile()
         {
             FilePath = null;
         }
