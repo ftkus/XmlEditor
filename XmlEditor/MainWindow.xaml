@@ -8,18 +8,19 @@
         mc:Ignorable="d"
         x:Name="win"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="MainWindow"
+        Title="{Binding WindowTitle}"
         Height="450"
         Width="800">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_New"
-                          Click="MiNew_OnClick"/>
+                          Click="MiNewFile_OnClick"/>
                 <MenuItem Header="_Open"
-                          Click="MiOpen_OnClick"/>
+                          Click="MiOpenFile_OnClick"/>
                 <Separator/>
-                <MenuItem Header="Save"/>
+                <MenuItem Header="Save"
+                          Click="MiSaveFile_OnClick"/>
                 <Separator/>
                 <MenuItem Header="CLose"/>
             </MenuItem>

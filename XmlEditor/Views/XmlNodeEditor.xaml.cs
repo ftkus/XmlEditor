@@ -54,7 +54,16 @@ namespace XmlEditor.Views
 
         private void ButSave_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.UpdateElement();
+            try
+            {
+                ViewModel.UpdateElement();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(Application.Current.MainWindow, ex.Message);
+                return;
+            }
+
             OnSave?.Invoke(this, EventArgs.Empty);
         }
     }
