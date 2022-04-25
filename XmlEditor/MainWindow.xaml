@@ -45,6 +45,18 @@
                               Click="MiNewNode_OnClick"/>
                     <MenuItem Header="Edit"/>
                 </Menu>
+                
+                <Grid DockPanel.Dock="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Text="Filter"/>
+                    <TextBox Grid.Column="1"
+                             Text="{Binding SearchFilter}"/>
+                </Grid>
 
                 <TreeView ItemsSource="{Binding XmlNodes}"
                           SelectedItemChanged="TreeView_OnSelectedItemChanged">
@@ -59,6 +71,8 @@
                                     Value="{Binding IsExpanded}"/>
                             <Setter Property="IsSelected"
                                     Value="{Binding IsSelected}"/>
+                            <Setter Property="Visibility"
+                                    Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         </Style>
                     </TreeView.ItemContainerStyle>
                 </TreeView>

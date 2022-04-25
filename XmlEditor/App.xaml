@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:XmlEditor"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
         <SolidColorBrush x:Key="EneroBlue" Color="#272b71"/>
 
         <Style TargetType="Button" x:Key="BasicButtonStyle">

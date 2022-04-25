@@ -21,6 +21,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     private XmlNodeViewModel _selectedXmlNode;
     private string _windowTitle;
     private ObservableCollection<XmlNodeViewModel> _xmlNodes;
+    private string _searchFilter;
 
     public MainWindow()
     {
@@ -45,6 +46,19 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     }
 
     public string File { get; set; }
+
+    public string SearchFilter
+    {
+        get => _searchFilter;
+        set
+        {
+            if (value == _searchFilter) return;
+            _searchFilter = value;
+            OnPropertyChanged();
+
+            ApplySearchFilter(value);
+        }
+    }
 
     public string WindowTitle
     {
@@ -107,6 +121,14 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     private void SetTitle()
     {
         WindowTitle = string.IsNullOrWhiteSpace(File) ? "XmlEditor" : $"XmlEditor - {File}";
+    }
+
+    private void ApplySearchFilter(string searchFilter)
+    {
+        foreach (var xmlNode in XmlNodes)
+        {
+            xmlNode.ApplySearchFilter(searchFilter);
+        }
     }
 
     [NotifyPropertyChangedInvocator]
@@ -259,4 +281,5 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
         Application.Current.Shutdown();
     }
+
 }

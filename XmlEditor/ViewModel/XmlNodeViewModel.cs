@@ -16,10 +16,13 @@ public class XmlNodeViewModel : INotifyPropertyChanged
     private bool _isExpanded;
     private bool _isSelected;
     private bool _canModifyPayload;
+    private bool _isVisible;
 
     public XmlNodeViewModel(XElement element)
     {
         Element = element;
+
+        IsVisible = true;
 
         UpdateFromElement();
     }
@@ -72,6 +75,17 @@ public class XmlNodeViewModel : INotifyPropertyChanged
         }
     }
 
+    public bool IsVisible
+    {
+        get => _isVisible;
+        set
+        {
+            if (value == _isVisible) return;
+            _isVisible = value;
+            OnPropertyChanged();
+        }
+    }
+
     public bool IsExpanded
     {
         get => _isExpanded;
@@ -111,6 +125,59 @@ public class XmlNodeViewModel : INotifyPropertyChanged
         if (CanModifyPayload) Payload = Element.Value;
     }
 
+    public bool ApplySearchFilter(string searchFilter)
+    {
+        bool isMatchFound = false;
+
+        foreach (var child in Children)
+        {
+            if (child.ApplySearchFilter(searchFilter))
+            {
+                isMatchFound = true;
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(searchFilter))
+        {
+            IsVisible = true;
+            return true;
+        }
+
+        if (!isMatchFound)
+        {
+            if (IsMatch(searchFilter, Name))
+            {
+                isMatchFound = true;
+            }
+
+            if (IsMatch(searchFilter, Payload))
+            {
+                isMatchFound = true;
+            }
+        }
+
+        if (!isMatchFound)
+        {
+            foreach (var attribute in Attributes)
+            {
+                if (IsMatch(searchFilter, attribute.Name))
+                {
+                    isMatchFound = true;
+                    break;
+                }
+
+                if (IsMatch(searchFilter, attribute.Value))
+                {
+                    isMatchFound = true;
+                    break;
+                }
+            }
+        }
+
+        IsVisible = isMatchFound;
+        return isMatchFound;
+    }
+
     public void UpdateElement()
     {
         Element.Name = Name;
@@ -143,5 +210,12 @@ public class XmlNodeViewModel : INotifyPropertyChanged
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private static bool IsMatch(string searchFilter, string field)
+    {
+        if (string.IsNullOrWhiteSpace(field)) return false;
+
+        return field.ToLower().Contains(searchFilter.ToLower());
     }
 }
