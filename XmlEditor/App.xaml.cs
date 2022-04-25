@@ -45,9 +45,13 @@ namespace XmlEditor
         public string FilePath { get; private set; }
 
         public CloseFileCommand CloseFileCommand { get; set; }
+
         public ExitCommand ExitCommand { get; set; }
+
         public NewFileCommand NewFileCommand { get; set; }
+
         public OpenFileCommand OpenFileCommand { get; set; }
+
         public SaveFileCommand SaveFileCommand { get; set; }
 
         public ObservableCollection<XmlNodeViewModel> XmlNodes
@@ -128,6 +132,25 @@ namespace XmlEditor
             fs.Dispose();
 
             OpenFile(filepath);
+        }
+
+        public void NewNode()
+        {
+            var newElement = new XElement("New", string.Empty);
+            var newNode = new XmlNodeViewModel(newElement);
+
+            if (SelectedXmlNode is null)
+            {
+                XmlNodes.Add(newNode);
+            }
+            else
+            {
+                SelectedXmlNode.Element.Add(newElement);
+                SelectedXmlNode.IsExpanded = true;
+                SelectedXmlNode.UpdateFromElement();
+            }
+
+            SelectedXmlNode = newNode;
         }
 
         public void SaveFile()
