@@ -7,28 +7,26 @@
         xmlns:v="clr-namespace:XmlEditor.Views"
         mc:Ignorable="d"
         x:Name="win"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        DataContext="{Binding RelativeSource={RelativeSource Self}, Path=App}"
         Title="{Binding WindowTitle}"
-        Height="450"
-        Width="800">
+        Height="650"
+        Width="1200">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_New"
-                          Click="MiNewFile_OnClick"/>
+                          Command="{Binding NewFileCommand}"/>
                 <MenuItem Header="_Open"
-                          Click="MiOpenFile_OnClick"/>
+                          Command="{Binding OpenFileCommand}"/>
                 <Separator/>
                 <MenuItem Header="_Save"
-                          Click="MiSaveFile_OnClick"
-                          IsEnabled="{Binding IsOpen}"/>
+                          Command="{Binding SaveFileCommand}"/>
                 <Separator/>
                 <MenuItem Header="_Close"
-                          Click="MiCloseFile_OnClick"
-                          IsEnabled="{Binding IsOpen}"/>
+                          Command="{Binding CloseFileCommand}"/>
                 <Separator/>
                 <MenuItem Header="E_xit"
-                          Click="MiExit_OnClick"/>
+                          Command="{Binding ExitCommand}"/>
             </MenuItem>
         </Menu>
         
@@ -42,7 +40,7 @@
             <DockPanel Grid.Column="0">
                 <Menu DockPanel.Dock="Top">
                     <MenuItem Header="New"
-                              Click="MiNewNode_OnClick"/>
+                              Command="{Binding NewNodeCommand}"/>
                     <MenuItem Header="Edit"/>
                 </Menu>
                 
