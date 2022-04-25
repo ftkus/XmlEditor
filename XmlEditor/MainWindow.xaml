@@ -19,10 +19,16 @@
                 <MenuItem Header="_Open"
                           Click="MiOpenFile_OnClick"/>
                 <Separator/>
-                <MenuItem Header="Save"
-                          Click="MiSaveFile_OnClick"/>
+                <MenuItem Header="_Save"
+                          Click="MiSaveFile_OnClick"
+                          IsEnabled="{Binding IsOpen}"/>
                 <Separator/>
-                <MenuItem Header="CLose"/>
+                <MenuItem Header="_Close"
+                          Click="MiCloseFile_OnClick"
+                          IsEnabled="{Binding IsOpen}"/>
+                <Separator/>
+                <MenuItem Header="E_xit"
+                          Click="MiExit_OnClick"/>
             </MenuItem>
         </Menu>
         
