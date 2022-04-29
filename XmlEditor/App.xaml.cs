@@ -43,6 +43,7 @@ namespace XmlEditor
             OpenFileCommand = new OpenFileCommand();
             SaveFileCommand = new SaveFileCommand();
             NewNodeCommand = new NewNodeCommand();
+            DeleteNodeCommand = new DeleteNodeCommand();
 
             ApplyChanges();
 
@@ -57,6 +58,8 @@ namespace XmlEditor
                 ApplyChanges();
             }
         }
+
+        public DeleteNodeCommand DeleteNodeCommand { get; set; }
 
         public CloseFileCommand CloseFileCommand { get; set; }
 
@@ -89,6 +92,8 @@ namespace XmlEditor
                 if (Equals(value, selectedXmlNode)) return;
                 selectedXmlNode = value;
                 OnPropertyChanged();
+
+                DeleteNodeCommand.RaiseCanExecute();
             }
         }
 
@@ -226,6 +231,7 @@ namespace XmlEditor
             CloseFileCommand.RaiseCanExecuteChanged();
             SaveFileCommand.RaiseCanExecuteChanged();
             NewNodeCommand.RaiseCanExecuteChanged();
+            DeleteNodeCommand.RaiseCanExecute();
         }
 
         private void SetTitle()
