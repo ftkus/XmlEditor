@@ -10,7 +10,7 @@ A generic XML reader and editor
 
 ## Roadmap
 
-- Delete XElements (nodes)
+- ~~Delete XElements (nodes)~~
 - Delete XAttributes
 - Limit XElement creation to a single XElement at the root level (and then default to the first-level)
 
