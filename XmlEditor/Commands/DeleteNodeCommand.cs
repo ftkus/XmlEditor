@@ -20,7 +20,7 @@ namespace XmlEditor.Commands
 
         public void Execute(object? parameter)
         {
-            throw new NotImplementedException();
+            App.Instance.DeleteNode((XmlNodeViewModel)parameter);
         }
 
         public void RaiseCanExecute()

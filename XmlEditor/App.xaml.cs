@@ -121,6 +121,26 @@ namespace XmlEditor
             }
         }
 
+        public XmlNodeViewModel? FindNodeFromElement(IEnumerable<XmlNodeViewModel> nodes, XElement element)
+        {
+            foreach(var node in nodes)
+            {
+                if (node.Element == element)
+                {
+                    return node;
+                }
+
+                XmlNodeViewModel foundNode = FindNodeFromElement(node.Children, element);
+                if (foundNode is not null)
+                {
+                    return foundNode;
+                }
+            }
+
+            return null;
+        }
+
+
         public void OpenFile(string filepath)
         {
             try
@@ -172,6 +192,30 @@ namespace XmlEditor
             }
 
             SelectedXmlNode = newNode;
+        }
+
+        public void DeleteNode(XmlNodeViewModel node)
+        {
+            try
+            {
+
+                var parent = node.Element.Parent;
+
+                var parentNode = FindNodeFromElement(XmlNodes, parent);
+
+                node.Element.Remove();
+
+                SelectedXmlNode = null;
+
+                if (parentNode is not null)
+                {
+                    parentNode.UpdateFromElement();
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(Current.MainWindow, ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void SaveFile()
@@ -247,7 +291,7 @@ namespace XmlEditor
 
         public static bool PromptUnsavedChanges()
         {
-            var result = MessageBox.Show(Current.MainWindow, "Unsaved changes will be lost", "Closing", MessageBoxButton.OKCancel);
+            var result = MessageBox.Show(Current.MainWindow, "Unsaved changes will be lost", "Closing", MessageBoxButton.OKCancel, MessageBoxImage.Question);
 
             return result == MessageBoxResult.OK;
         }
