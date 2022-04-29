@@ -41,7 +41,9 @@
                 <Menu DockPanel.Dock="Top">
                     <MenuItem Header="New"
                               Command="{Binding NewNodeCommand}"/>
-                    <MenuItem Header="Edit"/>
+                    <MenuItem Header="Delete"
+                              Command="{Binding DeleteNodeCommand}"
+                              CommandParameter="{Binding SelectedXmlNode}"/>
                 </Menu>
                 
                 <Grid DockPanel.Dock="Bottom">
