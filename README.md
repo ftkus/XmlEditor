@@ -13,4 +13,5 @@ A generic XML reader and editor
 - ~~Delete XElements (nodes)~~
 - Delete XAttributes
 - Limit XElement creation to a single XElement at the root level (and then default to the first-level)
+- Add XML Element Templates (prconfigured element name and attributes saved to a settings file)
 
